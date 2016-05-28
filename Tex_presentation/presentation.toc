@@ -1,0 +1,19 @@
+\beamer@endinputifotherversion {3.24pt}
+\beamer@sectionintoc {1}{Contexte}{3}{0}{1}
+\beamer@subsectionintoc {1}{1}{Méthodologies et outils}{4}{0}{1}
+\beamer@sectionintoc {2}{Systèmes de gestion de versions}{8}{0}{2}
+\beamer@subsectionintoc {2}{1}{Principe}{9}{0}{2}
+\beamer@subsectionintoc {2}{2}{Historique}{16}{0}{2}
+\beamer@sectionintoc {3}{Git}{18}{0}{3}
+\beamer@subsectionintoc {3}{1}{Bibliographie}{19}{0}{3}
+\beamer@subsectionintoc {3}{2}{Principales commandes}{20}{0}{3}
+\beamer@subsectionintoc {3}{3}{Configuration}{21}{0}{3}
+\beamer@sectionintoc {4}{Exemple local}{24}{0}{4}
+\beamer@subsectionintoc {4}{1}{Création du projet}{25}{0}{4}
+\beamer@subsectionintoc {4}{2}{Révision les fichiers}{31}{0}{4}
+\beamer@subsectionintoc {4}{3}{retour en arrière}{49}{0}{4}
+\beamer@subsectionintoc {4}{4}{Branches}{55}{0}{4}
+\beamer@sectionintoc {5}{Exemple collaboratif}{67}{0}{5}
+\beamer@subsectionintoc {5}{1}{Projet collaboratif}{68}{0}{5}
+\beamer@subsectionintoc {5}{2}{Travailler avec un clone}{74}{0}{5}
+\beamer@sectionintoc {6}{Résumé}{125}{0}{6}

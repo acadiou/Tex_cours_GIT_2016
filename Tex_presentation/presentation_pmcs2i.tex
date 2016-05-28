@@ -1,0 +1,2449 @@
+%\documentclass[10pt,xcolor={x11names,svgnames},compress,notes=hide]{beamer}
+\documentclass[10pt,xcolor={dvipsnames,usenames},compress,notes=hide]{beamer}
+% hide only show
+%\documentclass[10pt,xcolor=x11names,compress,notes=show,handout]{beamer}
+
+
+\usepackage[timeinterval=1]{tdclock}
+
+%% Beamer Layout %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{beamerthemeLMFA}
+%\usepackage{beamerthemeAmsterdam}
+%\usetheme{Frankfurt}
+
+\defbeamertemplate{footline}{crono frame number}
+{
+  %\quad\cronominutes\ '%
+  \resetcrono{\quad\cronominutes\pdfcolon\cronoseconds}%
+  \hfill%
+  \usebeamercolor[fg]{page number in head/foot}%
+  \usebeamerfont{page number in head/foot}%
+  \insertframenumber\,/\,\inserttotalframenumber\kern1em\vskip2pt%
+}
+\setbeamertemplate{footline}[crono frame number]
+
+
+\setbeamercovered{transparent=0}
+
+%\setbeamertemplate{caption}[numbered]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%\usepackage{verbatim}
+\usepackage{listings}
+
+%\usepackage{babel}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\newcommand*{\ttfamilywithbold}{\fontfamily{lmtt}\selectfont}
+%\usepackage[latin9]{inputenc}
+\usepackage{color}
+
+% gray -> kleur
+%\definecolor{trueblue}{RGB}{0, 115, 197} 
+%\definecolor{kleur}{RGB}{0, 115, 197} 
+
+%\usepackage{amssymb}
+\usepackage{graphicx}
+%\usepackage{subfig} is not supported by beamer 
+\usepackage{subfigure}
+%\usepackage{subcaption}
+\usepackage{multimedia}
+%%\usepackage{pdfpages}
+%
+
+\usepackage{hyperref}
+
+%\unitlength=1cm
+\unitlength=\paperwidth
+% putat Horizontal Vertical 
+\newcommand{\putat}[3]{\begin{picture}(0,0)(0,0)\put(#1,#2){#3}\end{picture}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+ % this default might be overridden by plain title style
+ \def\lyxframeend{} % In case there is a superfluous frame end
+ \long\def\lyxframe#1{\@lyxframe#1\@lyxframestop}%
+ \def\@lyxframe{\@ifnextchar<{\@@lyxframe}{\@@lyxframe<*>}}%
+ \def\@@lyxframe<#1>{\@ifnextchar[{\@@@lyxframe<#1>}{\@@@lyxframe<#1>[]}}
+ \def\@@@lyxframe<#1>[{\@ifnextchar<{\@@@@@lyxframe<#1>[}{\@@@@lyxframe<#1>[<*>][}}
+ \def\@@@@@lyxframe<#1>[#2]{\@ifnextchar[{\@@@@lyxframe<#1>[#2]}{\@@@@lyxframe<#1>[#2][]}}
+ \long\def\@@@@lyxframe<#1>[#2][#3]#4\@lyxframestop#5\lyxframeend{%
+   \frame<#1>[#2][#3]{\frametitle{#4}#5}}
+ \newenvironment{topcolumns}{\begin{columns}[t]}{\end{columns}}
+ \newenvironment{lyxcode}
+   {\par\begin{list}{}{
+     \setlength{\rightmargin}{\leftmargin}
+     \setlength{\listparindent}{0pt}% needed for AMS classes
+     \raggedright
+     \setlength{\itemsep}{0pt}
+     \setlength{\parsep}{0pt}
+     \normalfont\ttfamily}%
+    \def\{{\char`\{}
+    \def\}{\char`\}}
+    \def\textasciitilde{\char`\~}
+    \item[]}
+   {\end{list}}
+
+
+%
+% xfig
+%
+%\usepackage{color}
+\newcommand{\myTexFigure}[4]{
+	%\begin{center}
+        \resizebox{#2\linewidth}{!}{\input #3/#1.pspdftex} 
+        %\caption{#4}\label{fig:#1}
+	%\end{center}
+}
+
+\usepackage{minibox}
+\usepackage{tikz}
+\usetikzlibrary{calc,patterns,arrows,decorations.pathreplacing,shapes.multipart,shapes.misc}
+\tikzset{cross/.style={cross out, draw=black, minimum size=2*(#1-\pgflinewidth), inner sep=0pt, outer sep=0pt},thick,cross/.default={3mm}}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% outline
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\AtBeginSection[]
+{
+  \begin{frame}<beamer>
+    %\frametitle{Outline for section \thesection}
+    \frametitle{Table des matières}
+    \tableofcontents[currentsection,hideallsubsections]
+  \end{frame}
+}
+
+%Listing
+\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true}
+%\lstset{framextopmargin=50pt,frame=bottomline}
+\lstset{framextopmargin=50pt}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% BEGIN
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\title[Git]{Introduction \`a Git}
+%\subtitle{SUBTITLE}
+
+%\author[Anne Cadiou]{Anne Cadiou, Geoffroy Berret}
+\author[Anne Cadiou]{Anne Cadiou}
+
+\institute[CNRS]{Laboratoire de M\'ecanique des Fluides et d'Acoustique}
+
+\date{\textcolor{structure}{Informatique scientifique pour le calcul\\ \'Ecole doctorale\\
+ 2015-2016}}
+
+\titlegraphic{
+%\vspace{-0.12\linewidth}
+%\includegraphics[width=0.12\paperwidth]{Figures_logos/praceBW}
+%\hfill{}
+%\includegraphics[width=0.12\paperwidth]{Figures_logos/genciBW}
+%\\
+%\includegraphics[width=0.12\paperwidth]{Figures_logos/Equipameso-logo-BW}
+%\hfill{}
+%\includegraphics[width=0.12\paperwidth]{Figures_logos/logonewucb12}
+\includegraphics[width=0.12\paperwidth]{Figures_logos/logonewucb12_bw}
+\hfill{}
+%\includegraphics[width=0.08\paperwidth]{Figures_logos/logo_INSA_bw.png}
+\includegraphics[width=0.08\paperwidth]{Figures_logos/insa_bw.jpeg}
+\hfill{}
+\includegraphics[width=0.12\paperwidth]{Figures_logos/LOGO_LMFA_bw}
+\hfill{}
+%\includegraphics[width=0.18\paperwidth]{Figures_logos/LOGO_ECL}
+\includegraphics[width=0.18\paperwidth]{Figures_logos/LOGO_ECL_bw}
+\hfill{}
+\includegraphics[width=0.08\paperwidth]{Figures_logos/logoCNRS_bw}
+}
+
+\titlepage
+\end{frame}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{Bonjour,\\
+Je suis ingénieur de recherche au CNRS et travaille au Laboratoire de Mécanique des Fluides et d'Acoustique,
+et j'ai une longue expérience de développement de codes 
+pour l'étude des écoulements qui m'intéresse. Dernièrement, je travaille sur les 
+instabilités et la transition vers la turbulence, dans des configurations acadmiques. Les développements 
+sont faits à plusieurs, dans une  équipe où chacun développe certains 
+aspects spécifique à la physique qu'il traite et partage un certain nombre de bibliothèques communes. 
+
+Pour que les échanges soient simples et efficaces, 
+il suffit d'avoir un minimum d'organisation et 
+d'utiliser des outils de développement adaptés à ce fonctionnement. 
+
+L'objectif de ce cours est de vous donner les bases 
+d'utilisation de Git, un système de gestion de version. 
+L'uilisation d'un système de versionnement fait partie 
+des bonnes pratiques de développement de codes de calcul, 
+je vais en toucher un mot en introdction, 
+même si l'utilisation de Git peut s'étendre à toute forme de projet 
+écrit à plusieurs (notamment la production de documents écrits ou d'article...)
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Outline
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Table des matières}
+\tableofcontents[hideallsubsections]
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section[Contexte]{Contexte}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Méthodologies et outils} 
+\begin{frame}{Méthodologie} 
+%\initclock
+%\resetcrono
+
+\begin{alertblock}{}
+Mise en place de {\bf bonnes pratiques} pour le développement
+\end{alertblock}
+
+\begin{block}{Adopter une méthodologie d'{\bf intégration continue}}
+Vise à l'automatisation des tâches 
+(compilation, tests unitaires et fonctionnels, tests de performances, validation, documentation ...)
+\end{block}
+
+\begin{block}{Adopter une méthodologie {\bf agile}}
+({\it d'après Wikipédia})
+\begin{itemize}
+\item {\it les individus et leurs interactions}, plus que les processus et les outils
+\item des {\it logiciels opérationnels}, plus qu'une documentation exhaustive
+\item la {\it collaboration} avec les clients, plus que la négociation contractuelle 
+\item l'{\it adaptation} au changement, plus que le suivi d'un plan
+\end{itemize}
+\end{block}
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{... et outils}
+%\initclock
+%\resetcrono
+
+
+
+\begin{block}{En pratique}
+\begin{itemize}
+\item Code partagé et versionné
+\item Modifications fréquentes, testées automatiquement 
+\item Souplesse dans les développements
+\item Version fonctionnelle toujours disponible 
+\item[](tests, documentation, démonstration ou production)
+\end{itemize}
+\end{block}
+
+\begin{alertblock}{}
+Nécessite l'utilisation d'un minimum d'{\bf outils de génie logiciel}
+\end{alertblock}
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Outils de génie logiciel (1/2)}
+%\initclock
+%\resetcrono
+
+\begin{itemize}
+\item \structure{Atelier de génie logiciel},
+environnement de développement 
+\begin{itemize}
+\item Eclipse
+\item Visual Studio (propriétaire)  
+\end{itemize}
+\item[] Principe
+({\it d'après Wikipédia})
+\begin{itemize}
+\item[-]    conception générale du projet, étapes ou phases de réalisation 
+\item[-]    composition et organisation de l'équipe projet 
+\item[-]    calendrier, charges de travail, moyens et budgets 
+\item[-]    conventions de nommage des données et des programmes 
+\item[-]    structuration des données 
+\item[-]    aide à l'édition de programmes dans différents langages 
+\item[-]    compilation 
+\item[-]    génération de code optimisé 
+\item[-]    édition de liens 
+\item[-]    aide aux tests et suivi des corrections 
+\item[-]    bibliothèques pouvant être réutilisées dans plusieurs projets
+\item[-]    documentations 
+\item[-]    gestion des versions successives des programmes
+\end{itemize}
+\end{itemize}
+
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Outils de génie logiciel (2/2)}
+%\initclock
+%\resetcrono
+
+\begin{itemize}
+\item \structure{Forge logicielle}, gestion de projets de développement collaboratifs
+\begin{itemize}
+\item Redmine 
+\item Tuleap
+\item Trac
+\item GitLab
+%\item Gitorious
+\item FusionForge (reprise opensource de GForge, devenue propriétaire)
+\end{itemize}
+\item[] Fonctions disponibles d'une forge
+({\it d'après Wikipédia})
+\begin{itemize}
+\item[-]    système de gestion des versions (par exemple, via Git ou Mercurial) 
+\item[-]    gestionnaire de listes de discussion (et/ou de forums) 
+\item[-]    outil de suivi des bugs 
+\item[-]    gestionnaire de documentation (souvent sur le principe du wiki) 
+\item[-]    gestion des tâches 
+\end{itemize}
+\end{itemize}
+
+
+
+Dénominateur commun : 
+
+\structure{système de gestion de version}
+
+%système d'installation (déploiement)
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+
+\section[VCS]{Systèmes de gestion de versions}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Principe}
+%\begin{frame}[fragile]{\`A quoi ça sert et comment ça marche ?}
+\begin{frame}[fragile]{\`A quoi ça sert ?}
+
+Systèmes de gestion de version ({\it en anglais Version System Control})
+
+\begin{block}{Sert à : }
+\begin{itemize}
+\item enregistrer et sauvegarder les développements au cours du temps
+\item revenir en arrière sur une version spécifique
+\item collaborer sur un même document 
+\item enregistrer les modifications avec auteur et date
+\end{itemize}
+\end{block}
+
+%\begin{block}{Fonctionne : }
+%\begin{itemize}
+%\item sur toutes les plateformes
+%\end{itemize}
+%\end{block}
+
+
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Modes de travail (1/3)}
+
+Projet local
+
+\begin{center}
+%\begin{tikzpicture}[darkstyle/.style={circle,draw,fill=kleur!40,minimum size=20}]
+\begin{tikzpicture}[]
+%\node [circle,draw,fill=structure,minimum size=25]  (A) at (0,0) {A};
+\node [draw,fill=structure,minimum height=20,minimum width=40]  (A) at (0, 0) {fichier};
+\node [draw,fill=kleur!50,minimum height=20,minimum width=40]  (Révision 3) at (4, 0) {Révision 3};
+\node [draw,fill=kleur!30,minimum height=20,minimum width=40]  (Révision 2) at (4,-1) {Révision 2};
+\node [draw,fill=kleur!10,minimum height=20,minimum width=40]  (Révision 1) at (4,-2) {Révision 1};
+%\draw[->,thick,color=structure] (A) -- (Version 3) ;
+\draw[thick,color=structure] (A) -- (Révision 3) ;
+\draw[thick] (Révision 3) -- (Révision 2) ;
+\draw[thick] (Révision 2) -- (Révision 1) ;
+\end{tikzpicture}
+\end{center}
+
+Généralement facile d'utilisation, léger à configurer
+
+Collaboration pas vraiment prévue
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Modes de travail (2/3)}
+
+Projet centralisé
+
+\begin{center}
+%\begin{tikzpicture}[darkstyle/.style={circle,draw,fill=kleur!40,minimum size=20}]
+\begin{tikzpicture}[]
+\node [draw,fill=structure,minimum height=20,minimum width=40]  (A) at (0,  0.5) {fichier};
+\node [draw,minimum height=30,minimum width=80] (MA) at (0, 0.5) {};
+\node[] at ($(MA.south)+(0,-0.2)$) {Machine A};
+%
+\node [draw,fill=structure!60,minimum height=20,minimum width=40]  (B) at (0, -2.5) {fichier};
+\node [draw,minimum height=30,minimum width=80] (MB) at (0,-2.5) {};
+\node[] at ($(MB.south)+(0,-0.2)$) {Machine B};
+%
+\node [draw,fill=kleur!50,minimum height=20,minimum width=40]  (Révision 3) at (4, 0) {Révision 3};
+\node [draw,fill=kleur!30,minimum height=20,minimum width=40]  (Révision 2) at (4,-1) {Révision 2};
+\node [draw,fill=kleur!10,minimum height=20,minimum width=40]  (Révision 1) at (4,-2) {Révision 1};
+\node [draw,minimum height=100,minimum width=80] (Serveur) at (4,-1) {};
+\node[] at ($(Serveur.south)+(0,-0.2)$) {Serveur};
+\draw[-,thick,color=structure] ($(A.east)+(0.7,0)$) -- ($({Révision 2}.west)+(-0.6,1)$) ;
+\draw[-,thick,color=structure!60] ($(B.east)+(0.7,0)$) -- ($({Révision 2}.west)+(-0.6,-1)$) ;
+\draw[thick] (Révision 3) -- (Révision 2) ;
+\draw[thick] (Révision 2) -- (Révision 1) ;
+\end{tikzpicture}
+\end{center}
+
+
+Partage d'une archive sur un serveur unique
+
+Accès distant au serveur 
+
+Nécessite une connection internet 
+
+
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Modes de travail (3/3)}
+
+Projet distribué 
+
+%\begin{minipage}[ht!]{0.2\linewidth}
+%\hfill
+%\end{minipage}
+\setlength\fboxrule{0.pt}
+\fbox{
+\begin{minipage}[ht!]{1.0\linewidth}
+\hspace*{0.2\linewidth}\begin{center}
+%\begin{tikzpicture}[darkstyle/.style={circle,draw,fill=kleur!40,minimum size=20}]
+\vspace{-1.8cm}
+\begin{tikzpicture}[]
+%\usetikzlibrary{calc}
+\node [draw,fill=structure,minimum height=20,minimum width=40]  (A) at (-3.5,  0.77) {fichier};
+\node [draw,fill=kleur!50,minimum height=20,minimum width=40]  (RévisionA3) at (-3.5,-0.5) {Révision 3};
+\node [draw,fill=kleur!30,minimum height=20,minimum width=40]  (RévisionA2) at (-3.5,-1.5) {Révision 2};
+\node [draw,fill=kleur!10,minimum height=20,minimum width=40]  (RévisionA1) at (-3.5,-2.5) {Révision 1};
+\node [draw,minimum height=100,minimum width=80] (MA) at (RévisionA2) {};
+\node[] at ($(MA.south)+(0,-0.2)$) {Machine A};
+\node [draw,minimum height=30,minimum width=80] (fA) at (A) {};
+\draw[thick] (RévisionA3) -- (RévisionA2) ;
+\draw[thick] (RévisionA2) -- (RévisionA1) ;
+%
+\node [draw,fill=structure!60,minimum height=20,minimum width=40]  (B) at ( 4.5,  0.77) {fichier};
+\node [draw,fill=kleur!50,minimum height=20,minimum width=40]  (RévisionB3) at ( 4.5,-0.5) {Révision 3};
+\node [draw,fill=kleur!30,minimum height=20,minimum width=40]  (RévisionB2) at ( 4.5,-1.5) {Révision 2};
+\node [draw,fill=kleur!10,minimum height=20,minimum width=40]  (RévisionB1) at ( 4.5,-2.5) {Révision 1};
+\node [draw,minimum height=100,minimum width=80] (MB) at (RévisionB2) {};
+\node[] at ($(MB.south)+(0,-0.2)$) {Machine B};
+\node [draw,minimum height=30,minimum width=80] (fB) at (B) {};
+\draw[thick] (RévisionB3) -- (RévisionB2) ;
+\draw[thick] (RévisionB2) -- (RévisionB1) ;
+%
+\node [draw,fill=kleur!50,minimum height=20,minimum width=40]  (Révision 3) at (0.5, 2) {Révision 3};
+\node [draw,fill=kleur!30,minimum height=20,minimum width=40]  (Révision 2) at (0.5, 1) {Révision 2};
+\node [draw,fill=kleur!10,minimum height=20,minimum width=40]  (Révision 1) at (0.5, 0) {Révision 1};
+\node [draw,minimum height=100,minimum width=80] (Serveur) at (Révision 2) {};
+\node[] at ($(Serveur.south)+(0,-0.2)$) {};
+\draw[thick] (Révision 3) -- (Révision 2) ;
+\draw[thick] (Révision 2) -- (Révision 1) ;
+%
+\draw[-,thick,color=structure] ($(A.east)+(0.7,0)$) -- ($({Révision 2}.west)+(-0.6, 1)$) ;
+\draw[-,thick,color=structure!60] ($(B.west)+(-0.7,0)$) -- ($({Révision 2}.east)+( 0.6, 1)$) ;
+\draw[thick,dashed] ($(RévisionA1.east)+(0.7,0)$) -- ($(RévisionB1.west)+(-0.7,0)$) ;
+\end{tikzpicture}
+\end{center}
+\end{minipage}
+}
+
+
+
+Chacun travaille sur un clone du dépôt, gère des dépôts public/privé
+
+Permet de collaborer de différentes manières avec différentes personnes sur un même projet
+
+Pas besoin d'accès internet 
+
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Modes d'organisation (1/3)}
+
+Organisation centralisée 
+\begin{center}
+\begin{tikzpicture}[]
+%\usetikzlibrary{calc}
+\node [draw,fill=kleur!80,minimum height=30,minimum width=80]  (central) at (0,0) {Dépôt partagé};
+\node [draw,fill=kleur!30,minimum height=30,minimum width=80]  (devA) at (-3.5,-2.0) {Développeur};
+\node [draw,fill=kleur!30,minimum height=30,minimum width=80]  (devB) at ( 0.0,-2.0) {Développeur}; 
+\node [draw,fill=kleur!30,minimum height=30,minimum width=80]  (devC) at ( 3.5,-2.0) {Développeur};
+%
+\draw[<->,thick] (devA) -- (central) ;
+\draw[<->,thick] (devB) -- (central) ;
+\draw[<->,thick] (devC) -- (central) ;
+\end{tikzpicture}
+\end{center}
+
+Chacun échange avec le dépôt de référence. 
+
+Les développeurs doivent mettre à jour leurs clones
+
+avant de modifier le dépôt. 
+
+%Fonctionnement de type Subversion.
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Modes d'organisation (2/3)}
+
+Organisation via un intégrateur 
+\begin{center}
+\begin{tikzpicture}[every text node part/.style={align=center}]
+%\usetikzlibrary{calc}
+%\node [draw,fill=kleur!80,minimum height=30,minimum width=80,text width=20]  (central) at (-3.5,0) {Dépôt de réference};
+\node [draw,fill=kleur!80,minimum height=30,minimum width=80]  (central) at (-3.5,0) {Dépôt\\ de\\ réference};
+\node [draw,fill=structure!30,minimum height=30,minimum width=80]  (pubA) at ( 0.0,0) {Développeur\\  publique};
+\node [draw,fill=structure!30,minimum height=30,minimum width=80]  (pubB) at ( 3.5,0) {Développeur\\ publique};
+%
+\node [draw,fill=structure,minimum height=30,minimum width=80]  (manager) at (-3.5,-2.0) {Intégrateur};
+\node [draw,fill=kleur!50!structure,minimum height=30,minimum width=80]  (devA) at ( 0.0,-2.0) {Développeur\\ privé};
+\node [draw,fill=kleur!50!structure,minimum height=30,minimum width=80]  (devB) at ( 3.5,-2.0) {Développeur\\ privé};
+%
+\draw[->,thick] (manager) -- (central) ;
+\draw[->,thick] (devA) -- (pubA) ;
+\draw[->,thick] (devB) -- (pubB) ;
+\draw[->,thick,color=kleur!30!structure] (pubA) -- (manager);
+\draw[->,thick,color=kleur!30!structure] (pubB) -- (manager);
+\draw[->,thick,color=kleur!30] (central) -- (devA);
+\draw[->,thick,color=kleur!30] (central) -- (devB);
+\end{tikzpicture}
+\end{center}
+
+Chacun travaille avec un clone du dépôt de référence. 
+
+Chacun dépose ses développements dans un dépôt privé. 
+
+Chacun demande à l'intégrateur de déposer dans la référence. 
+
+%Fonctionnement de type GitHub.
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Modes d'organisation (3/3)}
+
+Organisation en sous-projet 
+\begin{center}
+\begin{tikzpicture}[every text node part/.style={align=center}]
+%\usetikzlibrary{calc}
+%\node [draw,fill=kleur!80,minimum height=30,minimum width=80,text width=20]  (central) at (-3.5,0) {Dépôt de réference};
+\node [draw,fill=kleur!80,minimum height=30,minimum width=80]  (central) at (-3.5,0) {Dépôt\\ de\\ réference};
+\node [draw,fill=kleur!30,minimum height=30,minimum width=80]  (proA) at ( 0.0,0) {Dépôt\\ projet};
+\node [draw,fill=kleur!30,minimum height=30,minimum width=80]  (proB) at ( 3.5,0) {Dépôt\\ projet};
+%
+\node [draw,fill=structure,minimum height=30,minimum width=80]  (manager) at (-3.5,-2.0) {Intégrateur};
+\node [draw,fill=kleur!50!structure,minimum height=30,minimum width=40]  (devA) at (-1.00,-2.0) {Dév.};
+\node [draw,fill=kleur!50!structure,minimum height=30,minimum width=40]  (devB) at ( 1.00,-2.0) {Dév.};
+\node [draw,fill=kleur!50!structure,minimum height=30,minimum width=40]  (devC) at ( 2.50,-2.0) {Dév.};
+\node [draw,fill=kleur!50!structure,minimum height=30,minimum width=40]  (devD) at ( 4.50,-2.0) {Dév.};
+%
+\draw[->,thick] (manager) -- (central) ;
+\draw[->,thick] (devA) -- (proA) ;
+\draw[->,thick] (devB) -- (proA) ;
+\draw[->,thick] (devC) -- (proB) ;
+\draw[->,thick] (devD) -- (proB) ;
+\draw[->,thick,color=kleur!30!structure] (proA) -- (manager);
+\draw[->,thick,color=kleur!30!structure] (proB) -- (manager);
+\draw[->,thick,color=kleur!30] (central) -- (devA);
+\draw[->,thick,color=kleur!30] (central) -- (devB);
+\draw[->,thick,color=kleur!30] (central) -- (devC);
+\draw[->,thick,color=kleur!30] (central) -- (devD);
+\end{tikzpicture}
+\end{center}
+
+Adapté à des gros projets, avec sous-parties de développement.
+
+%Fonctionnement de type noyau Linux.
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Historique}
+%\begin{frame}[fragile]{Systèmes de gestion de version}
+\begin{frame}{Historique des principaux opensources (1/2)}
+
+
+\begin{alertblock}{}
+\begin{itemize}
+\item {\bf Système local}
+\begin{itemize}
+\item \structure{RCS} (Revision Control System) 
+\item[] les développeurs partagent le même système de fichiers 
+\end{itemize}
+\item {\bf Système client-serveur}
+\begin{itemize}
+\item \structure{CVS} (Concurrent Versions System)
+\item[] dérivé de RCS, les développeurs partagent un dép\^ot unique
+\item \structure{Subversion} (SVN) 
+\item[] dérivé de CVS, fusions facilitées
+\end{itemize}
+\end{itemize}
+\end{alertblock}
+
+\end{frame}
+
+%\begin{lstlisting}
+%https://en.wikipedia.org/wiki/List_of_version_control_software
+%\end{lstlisting}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+\begin{frame}{Historique des principaux opensources (2/2)}
+
+Distributed Verson Control System (DVCS)
+
+\begin{alertblock}{}
+\begin{itemize}
+\item {\bf Système décentralisé}
+\begin{itemize}
+\item \structure{Git}
+\item[] conçu par Linus Torvalds pour le projet du noyau Linux en 2005
+\item \structure{Mercurial}
+\item[] en Python, évolution depuis 2005 de l'opensource de BitKeeper, anciennement utilisé pour le développement du noyau Linux (2002-2005)
+\item \structure{Bazaar}
+\item[] en Python, depuis 2005
+\item \structure{Fossill}
+\item[] en C, depuis 2006
+\item \structure{Veracity}
+\item[] depuis 2011
+\item[] intègre le suivi des bug et les outils de développement agile
+\item[] pas de rebase
+\end{itemize}
+\end{itemize}
+\end{alertblock}
+
+\end{frame}
+
+%\begin{lstlisting}
+%https://en.wikipedia.org/wiki/List_of_version_control_software
+%\end{lstlisting}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% GIT 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section[Git]{Git}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Bibliographie}
+\begin{frame}[fragile]{Apprendre git}
+
+https://www.atlassian.com/git/tutorials/
+http://rogerdudler.github.io/git-guide/index.fr.html
+\\[1em]
+
+http://www.le-fab-lab.com/memo-git.html
+http://www.le-fab-lab.com/git-travail-en-local.html
+http://www.le-fab-lab.com/git-depot-distant.html
+\\[1em]
+
+https://git-scm.com/
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Principales commandes}
+\begin{frame}[fragile]{Principales commandes}
+
+
+\begin{block}{Commandes de base}
+\begin{lstlisting}
+$ git status; git log; git diff
+$ git add; git commit
+\end{lstlisting}
+\end{block}
+
+\begin{block}{Commandes de branches}
+\begin{lstlisting}
+$ git branch
+$ git checkout 
+$ git merge 
+\end{lstlisting}
+\end{block}
+
+\begin{block}{Commandes de partage}
+\begin{lstlisting}
+$ git push
+$ git fetch
+$ git pull
+\end{lstlisting}
+\end{block}
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Configuration}
+\begin{frame}[fragile]{Configurer git}
+
+\begin{alertblock}{}
+\begin{lstlisting}
+$ git config --global user.name "Anne Cadiou"
+$ git config --global user.email "anne.cadiou@ec-lyon.fr"
+\end{lstlisting}
+\end{alertblock}
+\begin{alertblock}{}
+\begin{lstlisting}
+$ git config --global core.editor vim
+$ git config --global diff.external vimdiff
+$ git config --global color.ui true
+$ git config --global merge.tool vimdiff
+...
+$ git config --list
+\end{lstlisting}
+\end{alertblock}
+
+Stocké dans 
+\\[-0.2em]
+\begin{lstlisting}
+$ ls ~/.gitconfig
+\end{lstlisting}
+
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Exemple de configuration}
+
+\begin{alertblock}{}
+\begin{lstlisting}
+[user]
+  name = Anne Cadiou
+  email = anne.cadiou@ec-lyon.fr
+[core]
+  editor = vim
+[color]
+  ui = true
+[merge]
+  tool = vimdiff
+[alias]
+  lg = log --pretty=format:\"%h%x09%an%x09%ad%x09%s\"
+\end{lstlisting}
+\end{alertblock}
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Principe de base}
+
+Cycle de vie d'un fichier
+
+
+\begin{center}
+\begin{tikzpicture}[]
+\node [draw,fill=structure,minimum height=20,minimum width=40]  (working) at (0, 0) {répertoire de travail};
+\node [draw,minimum height=18,minimum width=40]  (untrack) at (-2, -0.8) {non suivi};
+\node [draw,minimum height=18,minimum width=40]  (unmodified) at (0,-0.8) {à jour};
+\node [draw,minimum height=18,minimum width=40]  (modified) at (2,-0.8) {modifié};
+\node [draw,fill=kleur!50,minimum height=20,minimum width=40]  (staging) at (4, 0) {zone d'index};
+\draw[line width=2pt,->] ($(untrack.south)+(0.1,-0.5)$) -- ($(unmodified.south)+(-0.1,-0.5)$) node[midway,above] {ajouter} ;
+\draw[line width=2pt,<-] ($(untrack.south)+(0.1,-0.7)$) -- ($(unmodified.south)+(-0,-0.7)$) node[midway,below] {retirer} ;
+\draw[line width=2pt,->] ($(unmodified.south)+(0.1,-0.2)$) -- ($(modified.south)+(-0.1,-0.2)$) node[midway,below] {éditer} ;
+\draw[line width=2pt,->] ($(modified.south)+(0.1,-0.2)$) -- ($(staging.south)+(-0.1,-1.0)$) node[midway,below] {indexer} ;
+%\node [draw,fill=kleur!10,minimum height=20,minimum width=40]  (git) at (8, 0) {répertoire git};
+\node [draw,fill=kleur!10,minimum height=20,minimum width=40]  (git) at (8, 0) {git};
+\node []  (checkout) at (6, -2) {extraction};
+\node []  (tmp) at (2, -3) {indexation};
+\node []  (commit) at (6, -4) {enregistrement};
+\draw[line width=4pt,<-,color=structure] ($(working.south)+(0,-2.1)$) -- ($(git.south)+(0,-2.1)$) ;
+\draw[line width=4pt,->,color=structure] ($(working.south)+(0,-3.1)$) -- ($(staging.south)+(0,-3.1)$) ;
+\draw[line width=4pt,->,color=structure] ($(staging.south)+(0,-4.1)$) -- ($(git.south)+(0,-4.1)$) ;
+\draw[line width=1pt,loosely dashed] (0,-1.4) -- (0,-4.4);
+\draw[line width=1pt,loosely dashed] (4,-0.4) -- (4,-4.4);
+\draw[line width=1pt,loosely dashed] (8,-0.4) -- (8,-4.4);
+\end{tikzpicture}
+\end{center}
+
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section[Exemple local]{Exemple local}
+\subsection{Création du projet}
+\begin{frame}[fragile]{Projet de développement local}
+
+Répertoire du projet
+\\[-1em]
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@local:~$ cd demo
+cadiou@local:~/demo$ ls
+logocalcul.png  projet.tex
+\end{lstlisting}
+\end{alertblock}
+
+Initialiser le dépôt 
+\\[-1em]
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@local:~/demo$ git init
+\end{lstlisting}
+%\only<2->{\begin{lstlisting}
+\onslide<2>\begin{lstlisting}
+Initialized empty Git repository in 
+/home/cadiou/demo/.git/
+\end{lstlisting}
+%}
+\end{alertblock}
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{État du projet}
+
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@local:~/demo$ git status
+\end{lstlisting}
+\onslide<2>\begin{lstlisting}
+On branch master
+
+Initial commit
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+  logocalcul.png
+  projet.tex
+
+nothing added to commit but untracked files present (use "git add" to track)
+\end{lstlisting}
+\end{alertblock}
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Modification du projet}
+
+Ajout des fichiers dans la liste des fichiers à suivre
+\\[-1em]
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@local:~/demo$ git add -all
+cadiou@local:~/demo$ git status
+\end{lstlisting}
+\onslide<2>\begin{lstlisting}
+On branch master
+
+Initial commit
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+
+  new file:   logocalcul.png
+  new file:   projet.tex
+\end{lstlisting}
+\end{alertblock}
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Révision les fichiers}
+\begin{frame}[fragile]{Révision les fichiers}
+
+Confier une révision au dépôt
+\\[-1em]
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@local:~/demo$ git commit -m "dépôt initial"
+\end{lstlisting}
+\onslide<2->\begin{lstlisting}
+[master (root-commit) 35dbd34] dépôt initial
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 logocalcul.png
+ create mode 100644 projet.tex
+\end{lstlisting}
+\end{alertblock}
+
+\onslide<1->Consulter le journal de bord
+\\[-1em]
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@local:~/demo$ git log
+\end{lstlisting}
+\onslide<3>\begin{lstlisting}
+commit 35dbd347c4264548fe2140bc36a49d5b08416fc9
+Author: Anne Cadiou <anne.cadiou@ec-lyon.fr>
+Date:   Thu Jan 14 15:18:41 2016 +0100
+
+    dépôt initial
+\end{lstlisting}
+\end{alertblock}
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{État du suivi}
+
+%État des lieux
+%\\[-1em]
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@local:~/demo$ git status
+\end{lstlisting}
+\onslide<2->\begin{lstlisting}
+On branch master
+nothing to commit, working directory clean
+\end{lstlisting}
+\end{alertblock}
+
+\onslide<1->Après modification d'un fichier
+\\[-1em]
+\begin{alertblock}{}
+\onslide<3>\begin{lstlisting}
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+  modified:   projet.tex
+
+no changes added to commit (use "git add" and/or "git commit -a")
+\end{lstlisting}
+\end{alertblock}
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Enregistrement des modifications}
+
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@local:~/demo$ git commit -m "ajout texte" projet.tex
+\end{lstlisting}
+\onslide<2->\begin{lstlisting}
+[master 9002ccb] ajout texte
+ 1 file changed, 2 insertions(+)
+\end{lstlisting}
+\end{alertblock}
+\hspace{1em}\\[-2.8em]
+%\onslide<1->Consulter le journal de bord
+%\\[-1em]
+\onslide<1->
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@local:~/demo$ git log
+\end{lstlisting}
+\onslide<3>\begin{lstlisting}
+commit 9002ccbab0a0cca2941cec9ee3182defe787a4b7
+Author: Anne Cadiou <anne.cadiou@ec-lyon.fr>
+Date:   Thu Jan 14 17:38:04 2016 +0100
+
+    ajout texte
+
+commit 35dbd347c4264548fe2140bc36a49d5b08416fc9
+Author: Anne Cadiou <anne.cadiou@ec-lyon.fr>
+Date:   Thu Jan 14 15:18:41 2016 +0100
+
+    dépôt initial
+\end{lstlisting}
+\end{alertblock}
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Comparaison entre les révisions}
+
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@local:~/demo$ git diff 9002ccb 35dbd34
+\end{lstlisting}
+\onslide<2->\begin{lstlisting}
+diff --git a/projet.tex b/projet.tex
+index c50c265..e69de29 100644
+--- a/projet.tex
++++ b/projet.tex
+@@ -1,2 +0,0 @@
+-% Ajout d'un texte
+-
+\end{lstlisting}
+\end{alertblock}
+
+\onslide<1->
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@local:~/demo$ git diff HEAD 35dbd34
+\end{lstlisting}
+\begin{lstlisting}
+cadiou@local:~/demo$ git difftool HEAD 35dbd34
+\end{lstlisting}
+\end{alertblock}
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Emploi de raccourcis}
+
+Modification et ajout de fichiers
+\\[-1em]
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@local:~/demo$ git status -s
+\end{lstlisting}
+\onslide<2->\begin{lstlisting}
+ M projet.tex
+?? README.txt
+\end{lstlisting}
+\end{alertblock}
+
+\onslide<1->
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@local:~/demo$ git add README.txt 
+cadiou@local:~/demo$ git status -s
+\end{lstlisting}
+\onslide<3>\begin{lstlisting}
+A  README.txt
+ M projet.tex
+\end{lstlisting}
+\end{alertblock}
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Journal de bord}
+
+
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@local:~/demo$ git commit -m "ajout titre" -a
+\end{lstlisting}
+\onslide<2->\begin{lstlisting}
+[master 145b9b5] ajout titre
+ 2 files changed, 2 insertions(+)
+ create mode 100644 README.txt
+\end{lstlisting}
+\end{alertblock}
+
+\onslide<1->
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@local:~/demo$ git log --oneline
+\end{lstlisting}
+\onslide<3>\begin{lstlisting}
+145b9b5 ajout titre
+9002ccb ajout texte
+35dbd34 dépôt initial
+\end{lstlisting}
+\end{alertblock}
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Alias}
+
+
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@local:~/demo$ git log --pretty=format:\"%h%x09%an%x09%ad%x09%s\"
+\end{lstlisting}
+\begin{lstlisting}
+145b9b5 Anne Cadiou     Thu Jan 14 18:23:21 2016 +0100  ajout titre
+9002ccb Anne Cadiou     Thu Jan 14 17:38:04 2016 +0100  ajout texte
+35dbd34 Anne Cadiou     Thu Jan 14 15:18:41 2016 +0100  dépôt initial
+\end{lstlisting}
+\end{alertblock}
+
+\begin{alertblock}{}
+\begin{lstlisting}
+git config --global alias.lg ' log --pretty=format:"%h%x09%an%x09%ad%x09%s"'
+\end{lstlisting}
+\end{alertblock}
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{retour en arrière}
+\begin{frame}[fragile]{Retour en arrière}
+
+\begin{lstlisting}
+145b9b5 ajout titre
+9002ccb ajout texte
+35dbd34 dépôt initial
+\end{lstlisting}
+
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@local:~/demo$ git checkout 9002ccb projet.tex 
+cadiou@local:~/demo$ git status -s
+\end{lstlisting}
+\onslide<2->\begin{lstlisting}
+M  projet.tex
+\end{lstlisting}
+\end{alertblock}
+
+\onslide<2->Le fichier est comme dans \structure{9002ccb}
+
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@local:~/demo$ git commit -m "retour vers 9002ccb" -a
+\end{lstlisting}
+\onslide<3->\begin{lstlisting}
+[master b1b2c39] retour vers 9002ccb
+ 1 file changed, 1 deletion(-)
+\end{lstlisting}
+\end{alertblock}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Annulation}
+
+
+\onslide<1->
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@local:~/demo$ git revert HEAD
+\end{lstlisting}
+\onslide<2->\begin{lstlisting}
+[master e03841b] Revert "retour vers 9002ccb"
+ 1 file changed, 1 insertion(+)
+\end{lstlisting}
+\end{alertblock}
+
+
+\onslide<1->
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@local:~/demo$ git log --oneline
+\end{lstlisting}
+\onslide<3->\begin{lstlisting}
+e03841b Revert "retour vers 9002ccb"
+b1b2c39 retour vers 9002ccb
+145b9b5 ajout titre
+9002ccb ajout texte
+35dbd34 dépôt initial
+\end{lstlisting}
+\end{alertblock}
+
+Le fichier est comme \structure{145b9b5}
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Branches}
+\begin{frame}[fragile]{Branches}
+
+Branches
+\\[-1em]
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@local:~/demo$ git branch
+\end{lstlisting}
+\begin{lstlisting}
+* master
+\end{lstlisting}
+\end{alertblock}
+
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Configuration}
+
+Ajouter à son environnement (.bashrc)
+\\[-1em]
+\begin{alertblock}{}
+\begin{lstlisting}
+function parse_git_branch {
+git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
+}
+function git-track {
+CURRENT_BRANCH=$(parse_git_branch)
+git-config branch.$CURRENT_BRANCH.remote $1
+git-config branch.$CURRENT_BRANCH.merge refs/heads/$CURRENT_BRANCH
+}
+function parse_git_branch_and_add_brackets {
+git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\ \[\1\]/'
+}
+
+PS1="\u@\h:\$(parse_git_branch_and_add_brackets) \w\$ "
+\end{lstlisting}
+\end{alertblock}
+
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Création d'une nouvelle branche}
+
+%Nouvelle branche
+%\\[-1em]
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@moon: [master] ~/demo$ git branch -a
+* master
+
+cadiou@moon: [master] ~/demo$ git branch develop
+cadiou@moon: [master] ~/demo$ git branch
+develop
+* master
+
+cadiou@moon: [master] ~/demo$ git checkout develop
+* develop
+master
+cadiou@moon: [develop] ~/demo$ 
+\end{lstlisting}
+\end{alertblock}
+
+Tout en une seule commande
+\\[-1em]
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@moon: [master] ~/demo$ git checkout -b develop
+Switched to a new branch 'develop'
+cadiou@moon: [develop] ~/demo$ 
+\end{lstlisting}
+\end{alertblock}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Fusion} 
+
+%Nouvelle branche
+%\\[-1em]
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@moon: [master] ~/demo$ git merge develop
+cadiou@moon: [master] ~/demo$ git log --oneline --graph --color
+\end{lstlisting}
+\onslide<2->\begin{lstlisting}
+*   2136676 après fusion
+|\  
+| * 457c155 ajout références
+| * 4ba2d09 ajout bibliographie
+* | fc6cc31 après branche
+|/  
+* e03841b Revert "retour vers 9002ccb"
+* b1b2c39 retour vers 9002ccb
+* 145b9b5 ajout titre
+* 9002ccb ajout texte
+* 35dbd34 dépôt initial
+\end{lstlisting}
+\end{alertblock}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Outils d'arbitrage}
+
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@moon: [master] ~/demo$ git difftool 9002ccb 145b9b5 projet.tex
+cadiou@moon: [master] ~/demo$ git mergetool develop
+cadiou@moon: [master] ~/demo$ git mergetool -t meld
+cadiou@moon: [master] ~/demo$ git config --global merge.tool kdiff3
+cadiou@moon: [master] ~/demo$ git config --global merge.tool vimdiff
+\end{lstlisting}
+\end{alertblock}
+
+dans .gitconfig
+
+\begin{lstlisting}
+[merge]
+	tool = vimdiff
+\end{lstlisting}
+
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Destruction des branches}
+
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@moon: [master] ~/demo$ git branch -d develop
+Deleted branch develop (was 387526b).
+
+cadiou@moon: [master] ~/demo$ git branch -a
+* master
+\end{lstlisting}
+\end{alertblock}
+
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Structure locale}
+
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@moon: [master] ~/demo$ ls -a 
+\end{lstlisting}
+\onslide<2->\begin{lstlisting}
+.  ..  bib.bib  .git  logocalcul.png  projet.tex  README.txt
+\end{lstlisting}
+\end{alertblock}
+
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@moon: [master] ~/demo$ cat .git/config
+\end{lstlisting}
+\onslide<3>\begin{lstlisting}
+[core]
+  repositoryformatversion = 0
+  filemode = true
+  bare = false
+  logallrefupdates = true
+\end{lstlisting}
+\end{alertblock}
+
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Exclure des fichiers}
+
+\begin{alertblock}{}
+\begin{lstlisting}
+cadiou@moon: [master] ~/demo$ vi .gitignore 
+\end{lstlisting}
+\onslide<2->\begin{lstlisting}
+.*.swp
+*.out
+*.log
+*.vrb
+*.nav
+*.aux
+*.toc
+*.blg
+\end{lstlisting}
+\end{alertblock}
+
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section[Exemple collaboratif]{Exemple collaboratif}
+\subsection{Projet collaboratif}
+
+\begin{frame}[fragile]{Initialiser le dépôt}
+
+Bonne pratique (extension .git)
+\\[-1em]
+\begin{alertblock}{}
+\begin{lstlisting}
+souris@distant:~$ mkdir demo.git
+\end{lstlisting}
+\end{alertblock}
+
+Initialiser le dépôt 
+\\[-1em]
+\begin{alertblock}{}
+\begin{lstlisting}
+souris@distant:~/demo.git$ git init --bare
+\end{lstlisting}
+\onslide<2>\begin{lstlisting}
+Initialized empty Git repository in /home/souris/demo.git/
+\end{lstlisting}
+\end{alertblock}
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Structure}
+
+
+\begin{alertblock}{}
+\begin{lstlisting}
+souris@distant:~/demo.git$ ls 
+\end{lstlisting}
+\onslide<2->\begin{lstlisting}
+branches  config  description  HEAD  hooks  info  objects  refs
+\end{lstlisting}
+\end{alertblock}
+
+\onslide<3->
+\begin{alertblock}{}
+\begin{lstlisting}
+souris@distant:~/demo.git$ cat config
+\end{lstlisting}
+\onslide<4>
+\begin{lstlisting}
+[core]
+  repositoryformatversion = 0
+  filemode = true
+  bare = true
+\end{lstlisting}
+\end{alertblock}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Travailler avec un clone}
+
+\begin{frame}[fragile]{Cloner}
+
+Machine locale de Bernard 
+\\[-1em]
+\begin{alertblock}{}
+\begin{lstlisting}
+bernard@pcbernard:~$ git clone souris@distant:~/demo.git 
+\end{lstlisting}
+\onslide<2->\begin{lstlisting}
+Cloning into 'demo'...
+warning: You appear to have cloned an empty repository.
+done.
+\end{lstlisting}
+\end{alertblock}
+
+\begin{alertblock}{}
+\begin{lstlisting}
+bernard@pcbernard:~$ cd demo
+bernard@pcbernard:~/demo$ ls -a
+\end{lstlisting}
+\onslide<3>\begin{lstlisting}
+.  ..  .git
+\end{lstlisting}
+\end{alertblock}
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Structure du clone}
+
+\begin{alertblock}{}
+\begin{lstlisting}
+bernard@pcbernard:~/demo$  cat .git/config
+\end{lstlisting}
+\onslide<2>
+\begin{lstlisting}
+[core]
+  repositoryformatversion = 0
+  filemode = true
+  bare = false
+  logallrefupdates = true
+[remote "origin"]
+  url = souris@distant:demo.git
+  fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "master"]
+  remote = origin
+  merge = refs/heads/master
+\end{lstlisting}
+\end{alertblock}
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Échanges avec le dépôt}
+
+\begin{alertblock}{}
+\begin{lstlisting}
+bernard@pcbernard:~/demo$  vi fichier.tex
+bernard@pcbernard:~/demo$  git add fichier.tex
+bernard@pcbernard:~/demo$  git commit -m "Ajout de fichier" -a
+\end{lstlisting}
+\onslide<2->
+\begin{lstlisting}
+[master (root-commit) 4ba89d5] Ajout de fichier
+ 1 file changed, 2 insertions(+)
+ create mode 100644 fichier.tex
+\end{lstlisting}
+\onslide<3->
+\begin{lstlisting}
+bernard@pcbernard:~/demo$  git push origin master
+\end{lstlisting}
+\onslide<4->
+\begin{lstlisting}
+Counting objects: 3, done.
+Writing objects: 100% (3/3), 240 bytes | 0 bytes/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To souris@distant:TEST/demo.git
+ * [new branch]      master -> master
+\end{lstlisting}
+\end{alertblock}
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Bianca veut participer...}
+
+\begin{alertblock}{}
+\begin{lstlisting}
+bianca@pcbianca:~$ git clone souris@distant:~/demo.git 
+\end{lstlisting}
+\onslide<2->
+\begin{lstlisting}
+Cloning into 'demo'...
+remote: Counting objects: 3, done.
+remote: Total 3 (delta 0), reused 0 (delta 0)
+Receiving objects: 100% (3/3), done.
+Checking connectivity... done.
+\end{lstlisting}
+\onslide<3->
+\begin{lstlisting}
+bianca@pcbianca:~$ cd demo
+bianca@pcbianca:~/demo$ ls
+\end{lstlisting}
+\onslide<4->
+\begin{lstlisting}
+fichier.tex
+\end{lstlisting}
+\onslide<5->
+\begin{lstlisting}
+bianca@pcbianca:~/demo$ git lg (alias de log --pretty=format:\"%h%x09%an%x09%ad%x09%s\")
+\end{lstlisting}
+\onslide<6->
+\begin{lstlisting}
+ba89d5 Bernard Mice    Sun Jan 17 18:10:43 2016 +0100  Ajout de fichier
+\end{lstlisting}
+\end{alertblock}
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Collaboration en image}
+
+\begin{overlayarea}{\textwidth}{\textheight}
+%\begin{center}
+\begin{tikzpicture}[every text node part/.style={align=left}]
+
+\only<1->{
+\node [draw,fill=structure,minimum height=60,minimum width=40]  (A) at (0, 0) {fichier.tex};
+\node[] at ($(A.north)+(0,0.4)$) {Dépôt};
+}
+
+\only<1->{
+\node [draw,fill=kleur!50,minimum height=60,minimum width=40]  (repBernard) at ( 4,  2) {fichier.tex};
+\node[] at ($(repBernard.north)+(0, 0.4)$) {Dépôt de Bernard};
+\node [draw,fill=kleur!10,minimum height=60,minimum width=40]  (wrkBernard) at ( 7,  2) {fichier.tex};
+\node[] at ($(wrkBernard.north)+(0, 0.4)$) {Bernard};
+}
+
+\only<1>{
+\draw[->,thick,color=structure] (A) -- (repBernard) node[midway, above,sloped] {clone} ;
+\draw[<->,thick] (repBernard) -- (wrkBernard) {} ;
+}
+
+
+\only<2->{
+\node [draw,fill=structure!50,minimum height=60,minimum width=40]  (repBianca) at ( 4, -2) {fichier.tex};
+\node[] at ($(repBianca.north)+(0, 0.4)$) {Dépôt de Bianca};
+\node [draw,fill=structure!10,minimum height=60,minimum width=40]  (wrkBianca) at ( 7, -2) {fichier.tex};
+\node[] at ($(wrkBianca.north)+(0, 0.4)$) {Bianca};
+}
+
+\only<2>{
+\draw[->,thick,color=structure] (A) -- (repBianca) node[midway, above,sloped] {clone} ;
+\draw[<->,thick] (repBianca) -- (wrkBianca) {} ;
+}
+
+\end{tikzpicture}
+%\end{center}
+\end{overlayarea}
+
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{frame}[fragile]{Développements distincts}
+\begin{frame}[fragile]{Collaboration en image}
+
+\begin{overlayarea}{\textwidth}{\textheight}
+%\begin{center}
+\begin{tikzpicture}[every text node part/.style={align=left}]
+
+\node [draw,fill=structure,minimum height=60,minimum width=40]  (A) at (0, 0) {fichier.tex};
+\node[] at ($(A.north)+(0,0.4)$) {Dépôt};
+
+\node [draw,fill=kleur!50,minimum height=60,minimum width=40]  (repBernard) at ( 4,  2) {fichier.tex};
+\node[] at ($(repBernard.north)+(0, 0.4)$) {Dépôt de Bernard};
+\node [draw,fill=kleur!10,minimum height=60,minimum width=40]  (wrkBernard) at ( 7,  2) {fichier.tex};
+\node[] at ($(wrkBernard.north)+(0, 0.4)$) {Bernard};
+\node[draw,circle,minimum size=4mm,thick] at ($(wrkBernard)+(-0.6, 0.0)$) {};
+
+\only<2>{
+\draw[<-,thick] (repBernard) -- (wrkBernard) node[midway, above, sloped] {commit} ;
+}
+\only<2->{
+\node[draw,circle,minimum size=4mm,thick] at ($(repBernard)+(-0.6, 0.0)$) {};
+}
+
+%\draw[->,thick,color=structure] (A) -- (repBernard) node[midway, above,sloped] {clone} ;
+
+
+\node [draw,fill=structure!50,minimum height=60,minimum width=40]  (repBianca) at ( 4, -2) {fichier.tex};
+\node[] at ($(repBianca.north)+(0, 0.4)$) {Dépôt de Bianca};
+\node [draw,fill=structure!10,minimum height=60,minimum width=40]  (wrkBianca) at ( 7, -2) {fichier.tex};
+\node[] at ($(wrkBianca.north)+(0, 0.4)$) {Bianca};
+\node[draw,circle,minimum size=4mm,thick] at ($(wrkBianca)+( 0.01, 0.00)$) {};
+
+\only<2>{
+\draw[<-,thick] (repBianca) -- (wrkBianca) node[midway, above, sloped] {commit} ;
+}
+\only<2->{
+\node[draw,circle,minimum size=4mm,thick] at ($(repBianca)+( 0.01, 0.00)$) {};
+}
+
+\only<3>{
+\draw[->,thick] (repBernard) -- (A) node[midway, above, sloped] {push} ;
+}
+\only<3->{
+\node[draw,circle,minimum size=4mm,thick] at ($(A)+(-0.6, 0.0)$) {};
+}
+
+\only<4>{
+\draw[->,thick] (repBianca) -- (A) node[midway, above, sloped] {push} ;
+}
+\only<4->{
+\node[draw,circle,minimum size=4mm,thick] at ($(A)+( 0.01, -0.02)$) {};
+}
+
+
+\only<5>{
+\draw[<-,thick] (repBernard) -- (A) node[midway, above, sloped] {pull} ;
+\draw[<-,thick] (repBianca) -- (A) node[midway, above, sloped] {pull} ;
+}
+\only<5->{
+\node[draw,circle,minimum size=4mm,thick] at ($(repBernard)+( 0.01, 0.00)$) {};
+\node[draw,circle,minimum size=4mm,thick] at ($(repBianca)+(-0.60, 0.00)$) {};
+\node[draw,circle,minimum size=4mm,thick] at ($(wrkBernard)+( 0.01, 0.00)$) {};
+\node[draw,circle,minimum size=4mm,thick] at ($(wrkBianca)+(-0.60, 0.00)$) {};
+}
+
+
+
+%\draw[->,thick,color=structure] (A) -- (repBianca) node[midway, above,sloped] {clone} ;
+%\draw[<->,thick] (repBianca) -- (wrkBianca) {} ;
+
+\end{tikzpicture}
+%\end{center}
+\end{overlayarea}
+
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% exemple de conflit - merge - synchro
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Travail simultané de Bernard et Bianca}
+
+\begin{alertblock}{}
+\begin{lstlisting}
+bianca@pcbianca:~/demo$ vi fichier.tex
+bianca@pcbianca:~/demo$ git commit -m 'modification de Bianca' -a
+\end{lstlisting}
+\onslide<2->
+\begin{lstlisting}
+[master 94ae224] modification de Bianca
+ 1 file changed, 1 insertion(+)
+\end{lstlisting}
+\end{alertblock}
+
+\onslide<3->
+\begin{alertblock}{}
+\begin{lstlisting}
+bernard@pcbernard:~/demo$ vi fichier.tex
+bernard@pcbernard:~/demo$ git commit -m 'modification de Bernard' -a
+\end{lstlisting}
+\onslide<4->
+\begin{lstlisting}
+[master 52d0dce] modification de Bernard
+ 1 file changed, 1 insertion(+)
+\end{lstlisting}
+\end{alertblock}
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Bianca dépose ses modifications}
+
+\begin{alertblock}{}
+\begin{lstlisting}
+bianca@pcbianca:~/demo$ git push origin master
+\end{lstlisting}
+\onslide<2->
+\begin{lstlisting}
+Counting objects: 5, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 299 bytes | 0 bytes/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To souris@distant:~/demo.git
+   4ba89d5..94ae224  master -> master
+\end{lstlisting}
+\end{alertblock}
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Bernard échoue}
+
+\begin{alertblock}{}
+\begin{lstlisting}
+bernard@pcbernard:~/demo$ git push origin master
+\end{lstlisting}
+\onslide<2->
+\begin{lstlisting}
+To souris@distant:~/demo.git
+ ! [rejected]        master -> master (fetch first)
+error: failed to push some refs to 'souris@distant:~/demo.git'
+hint: Updates were rejected because the remote contains work that you do
+hint: not have locally. This is usually caused by another repository pushing
+hint: to the same ref. You may want to first integrate the remote changes
+hint: (e.g., 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+\end{lstlisting}
+\end{alertblock}
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Conflit et résolution}
+
+\begin{overlayarea}{\textwidth}{\textheight}
+%\begin{center}
+\begin{tikzpicture}[every text node part/.style={align=left}]
+
+\node [draw,fill=structure,minimum height=60,minimum width=40]  (A) at (0, 0) {fichier.tex};
+\node[] at ($(A.north)+(0,0.4)$) {Dépôt};
+
+\node [draw,fill=kleur!50,minimum height=60,minimum width=40]  (repBernard) at ( 4,  2) {fichier.tex};
+\node[] at ($(repBernard.north)+(0, 0.4)$) {Dépôt de Bernard};
+\node [draw,fill=kleur!10,minimum height=60,minimum width=40]  (wrkBernard) at ( 7,  2) {fichier.tex};
+\node[] at ($(wrkBernard.north)+(0, 0.4)$) {Bernard};
+\node[draw,circle,minimum size=4mm,thick] at ($(wrkBernard)+(-0.6, 0.0)$) {};
+
+\only<2>{
+\draw[<-,thick] (repBernard) -- (wrkBernard) node[midway, above, sloped] {commit} ;
+}
+\only<2->{
+\node[draw,circle,minimum size=4mm,thick] at ($(repBernard)+(-0.6, 0.0)$) {};
+}
+
+%\draw[->,thick,color=structure] (A) -- (repBernard) node[midway, above,sloped] {clone} ;
+
+
+\node [draw,fill=structure!50,minimum height=60,minimum width=40]  (repBianca) at ( 4, -2) {fichier.tex};
+\node[] at ($(repBianca.north)+(0, 0.4)$) {Dépôt de Bianca};
+\node [draw,fill=structure!10,minimum height=60,minimum width=40]  (wrkBianca) at ( 7, -2) {fichier.tex};
+\node[] at ($(wrkBianca.north)+(0, 0.4)$) {Bianca};
+\only<2-5>{
+\node[draw,circle,minimum size=4mm,thick,color=structure] at ($(wrkBianca)+(-0.60, 0.00)$) {};
+}
+
+\only<2>{
+\draw[<-,thick] (repBianca) -- (wrkBianca) node[midway, above, sloped] {commit} ;
+}
+\only<2-5>{
+\node[draw,circle,minimum size=4mm,thick,color=structure] at ($(repBianca)+(-0.60, 0.00)$) {};
+}
+
+\only<3>{
+\draw[->,thick] (repBernard) -- (A) node[midway, above, sloped] {push} ;
+}
+\only<3-7>{
+\node[draw,circle,minimum size=4mm,thick] at ($(A)+(-0.6, 0.0)$) {};
+}
+
+\only<4>{
+\draw[->,thick] (repBianca) -- (A) node[midway, above, sloped] {push} ;
+\draw[] (repBianca) -- (A) node[cross,midway,sloped] {} ;
+}
+
+
+\only<5>{
+\draw[<-,thick] (repBianca) -- (A) node[midway, above, sloped] {pull} ;
+}
+\only<5>{
+\node[draw,circle,minimum size=4mm,thick] at ($(wrkBianca)+(-0.58, 0.00)$) {};
+\node[draw,circle,minimum size=4mm,thick,color=structure] at ($(wrkBianca)+(-0.60, 0.00)$) {};
+\node[] at ($(wrkBianca.south)+(0,-0.4)$) {Conflit !};
+}
+
+\only<6->{
+\node[draw,circle,minimum size=3mm,thick,dashed] at ($(wrkBianca)+(-0.60, 0.00)$) {};
+\node[draw,circle,minimum size=4mm,thick,dashed,color=structure] at ($(wrkBianca)+(-0.60, 0.00)$) {};
+}
+\only<6>{
+\node[] at ($(wrkBianca.south)+(0,-0.4)$) {arbitrage/fusion effective};
+}
+
+
+\only<7->{
+\draw[<-,thick] (repBianca) -- (wrkBianca) node[midway, above, sloped] {commit} ;
+\node[draw,circle,minimum size=3mm,thick,dashed] at ($(repBianca)+(-0.60, 0.00)$) {};
+\node[draw,circle,minimum size=4mm,thick,dashed,color=structure] at ($(repBianca)+(-0.60, 0.00)$) {};
+}
+
+
+\only<8->{
+\draw[<-,thick] (repBianca) -- (wrkBianca) node[midway, above, sloped] {commit} ;
+\node[draw,circle,minimum size=3mm,thick,dashed,color=black] at ($(A)+(-0.60, 0.00)$) {};
+\node[draw,circle,minimum size=4mm,thick,dashed,color=white] at ($(A)+(-0.60, 0.00)$) {};
+\draw[->,thick] (repBianca) -- (A) node[midway, above, sloped] {push} ;
+}
+
+
+
+
+%\draw[->,thick,color=structure] (A) -- (repBianca) node[midway, above,sloped] {clone} ;
+%\draw[<->,thick] (repBianca) -- (wrkBianca) {} ;
+
+\end{tikzpicture}
+%\end{center}
+\end{overlayarea}
+
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Gestion des conflits entre Bernard et Bianca}
+
+\begin{alertblock}{}
+\begin{lstlisting}
+bernard@pcbernard:~/demo$ git pull 
+\end{lstlisting}
+\onslide<2->
+\begin{lstlisting}
+remote: Counting objects: 5, done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 3 (delta 0), reused 0 (delta 0)
+Unpacking objects: 100% (3/3), done.
+From p2chpd-visu7.univ-lyon1.fr:TEST/demo
+   4ba89d5..94ae224  master     -> origin/master
+Auto-merging fichier.tex
+CONFLICT (content): Merge conflict in fichier.tex
+Automatic merge failed; fix conflicts and then commit the result.
+\end{lstlisting}
+\end{alertblock}
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Fusion manuelle}
+
+\begin{alertblock}{}
+\begin{lstlisting}
+bernard@pcbernard:~/demo$ vi fichier.tex
+\end{lstlisting}
+\onslide<2->
+\begin{lstlisting}
+  1 %commentaire de Bernard
+  2 <<<<<<< HEAD
+  3 %commentaire de Bernard
+  4 =======
+  5 %commentaire de Bianca au même endroit
+  6 >>>>>>> 94ae22421e3bf6d329bdf1e13bcbc77a850ed258
+\end{lstlisting}
+\end{alertblock}
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Fusion avec un outil}
+
+
+\begin{alertblock}{}
+\begin{lstlisting}
+bernard@pcbernard:~/demo$ git mergetool fichier.tex
+bernard@pcbernard:~/demo$ git checkout --ours fichier.tex
+bernard@pcbernard:~/demo$ git checkout --theirs fichier.tex
+bernard@pcbernard:~/demo$ git commit -m "fusion avec theirs"
+\end{lstlisting}
+\onslide<2->
+\begin{lstlisting}
+Normal merge conflict for 'fichier.tex':
+  {local}: modified file
+  {remote}: modified file
+Hit return to start merge resolution tool (vimdiff): 
+4 files to edit
+\end{lstlisting}
+\end{alertblock}
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Fusion en instance}
+
+\begin{alertblock}{}
+\begin{lstlisting}
+bernard@pcbernard:~/demo$ git status 
+\end{lstlisting}
+\onslide<2->
+\begin{lstlisting}
+On branch master
+Your branch and 'origin/master' have diverged,
+and have 1 and 1 different commit each, respectively.
+  (use "git pull" to merge the remote branch into yours)
+
+All conflicts fixed but you are still merging.
+  (use "git commit" to conclude merge)
+
+Changes to be committed:
+
+  modified:   fichier.tex
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+  fichier.tex.orig
+\end{lstlisting}
+\end{alertblock}
+
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Fusion effective}
+
+
+\begin{alertblock}{}
+\begin{lstlisting}
+bernard@pcbernard:~/demo$ git commit -m "fusion avec theirs"
+[master c198c63] fusion avec theirs 
+bernard@pcbernard:~/demo$ git push origin master
+\end{lstlisting}
+\onslide<2->
+\begin{lstlisting}
+Counting objects: 10, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (6/6), 556 bytes | 0 bytes/s, done.
+Total 6 (delta 0), reused 0 (delta 0)
+To souris@distant:~/demo.git
+   94ae224..c198c63  master -> master
+\end{lstlisting}
+\end{alertblock}
+
+\onslide<2->
+\begin{alertblock}{}
+\begin{lstlisting}
+bernard@pcbernard:~/demo$ git pull origin master
+\end{lstlisting}
+\onslide<3->
+\begin{lstlisting}
+From distant:~/demo
+ * branch            master     -> FETCH_HEAD
+Already up-to-date.
+\end{lstlisting}
+\end{alertblock}
+
+\onslide<3->
+... travail à faire par Bianca s'il continue ses modifications
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% branche collaborative
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Bonne pratique : utiliser les branches}
+
+\begin{alertblock}{}
+\begin{lstlisting}
+bernard@pcbernard:~$ git clone souris@distant:~/demo.git 
+bernard@pcbernard:~$ git checkout -b bernardbranche
+\end{lstlisting}
+\onslide<2->
+\begin{lstlisting}
+git branch -a
+* master
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/master
+\end{lstlisting}
+\end{alertblock}
+
+\begin{alertblock}{}
+\begin{lstlisting}
+bianca@pcbianca:~$ git clone souris@distant:~/demo.git 
+bianca@pcbianca:~$ git checkout -b biancabranche
+\end{lstlisting}
+\end{alertblock}
+
+... et utiliser les différentes commandes
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% résumé
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Résumé}
+\begin{frame}[fragile]{Résumé}
+
+\begin{itemize}
+\item Travailler sur des clones de dépôt (bare)
+\item Travailler sur des branches
+\item Gestion des conflits 
+\begin{itemize}
+\item lors d'une commande git pull
+\item[] fusionner les fichiers (merge)
+\item lors d'une commande git push 
+\item[] récupérer (pull) la dernière modification et 
+\item[] fusionner les fichiers (merge)
+\end{itemize}
+\end{itemize}
+
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\note{
+}
+
+
+%\author[Anne Cadiou]{Anne Cadiou, Geoffroy Berret}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+

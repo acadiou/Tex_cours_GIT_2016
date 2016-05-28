@@ -1,0 +1,12 @@
+*_v*.tex
+*.aux
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
+*.swp
+*build*
+*test_v*
+

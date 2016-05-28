@@ -1,0 +1,172 @@
+\DeclareOptionBeamer{compress}{\beamer@compresstrue}
+\ProcessOptionsBeamer
+
+\mode<presentation>
+
+\setbeamertemplate{navigation symbols}{}
+
+
+%THEMESHADOW\useinnertheme[shadow=true]{rounded}
+%THEMESHADOW\usecolortheme{orchid}
+%THEMESHADOW\usecolortheme{whale}
+%THEMESHADOW\useoutertheme{shadow}
+%THEMESHADOW\usefonttheme[onlysmall]{structurebold}
+%THEMESHADOW
+%THEMESHADOW\setbeamercolor{title}{use=structure,fg=white,bg=structure.fg}
+%THEMESHADOW\setbeamerfont{block title}{size={}}
+
+\useoutertheme[subsection=false]{miniframes}
+%\useoutertheme[shadow]{miniframes}
+%\useinnertheme{default}
+% shadow, round
+%\useinnertheme[shadow=true]{rounded}
+% rectangle cannot be shadowed
+\useinnertheme[]{rectangles}
+
+%\usefonttheme{serif}
+%\usepackage{palatino}
+%\setbeamerfont{title like}{shape=\scshape}
+%\setbeamerfont{frametitle}{shape=\scshape}
+
+
+%% ECL red trop marron
+%\definecolor{structure}{RGB}{150,23,46} 
+%% ECL red un peu sombre
+%\definecolor{structure}{RGB}{167,28,54} 
+%% ECL red rouge un peu moins lumineux
+%\definecolor{structure}{RGB}{153,0,0} 
+%% ECL red sombre
+%\definecolor{structure}{RGB}{133,0,0} 
+%% ECL red un peu sombre
+%\definecolor{structure}{RGB}{152,26,45}
+%% ECL red encore un peu trop sombre
+%\definecolor{structure}{RGB}{134,16,28}
+%% ECL red picked
+%\definecolor{structure}{RGB}{204, 0, 0} 
+
+% ECL red/gray OK papier
+\definecolor{structure}{RGB}{177,36,34} 
+\definecolor{kleur}{RGB}{191,191,191}
+% gray90 229;229;229 black!10
+\definecolor{bandeau}{RGB}{229,229,229}
+% white 255;255;255
+\definecolor{fond}{RGB}{255,255,255}
+% white 255;255;255
+\definecolor{fondalerttitle}{RGB}{255,255,255}
+% gris foncé black!15 
+\definecolor{fondalert}{RGB}{238,238,238}
+% gris foncé black!15 gray85
+\definecolor{fondblocktitle}{RGB}{217,217,217}
+% gris clair black!05 gray95
+\definecolor{fondblock}{RGB}{242,242,242}
+
+% ECL red/gray OK beamer ?
+\definecolor{structure}{RGB}{177,36,34} 
+% gray75 (foncé)
+\definecolor{gray75}{RGB}{191,191,191}
+% gray65 (foncé)
+\definecolor{gray65}{RGB}{166,166,166}
+% gray85 (clair)
+\definecolor{gray85}{RGB}{217,217,217}
+% couleur graphes ou dans listing
+%\definecolor{kleur}{RGB}{217,217,217}
+\colorlet{kleur}{black!15}
+% gris clair 
+%\definecolor{bandeau}{RGB}{217,217,217}
+\colorlet{bandeau}{black!15}
+% white 255;255;255
+%\definecolor{fond}{RGB}{255,255,255}
+\colorlet{fond}{white}
+% white 255;255;255
+%\definecolor{fondalerttitle}{RGB}{255,255,255}
+\colorlet{fondalerttitle}{white}
+% gris clair 
+%\definecolor{fondalert}{RGB}{217,217,217}
+\colorlet{fondalert}{black!15}
+% gris foncé
+%\definecolor{fondblocktitle}{RGB}{166,166,166}
+\colorlet{fondblocktitle}{black!35}
+% gris clair 
+%\definecolor{fondblock}{RGB}{217,217,217}
+\colorlet{fondblock}{black!15}
+
+
+%% Bleu trueblue 
+%\definecolor{structure}{RGB}{0, 115, 197} 
+% Bleu blue 
+%\definecolor{structure}{RGB}{0, 128, 255}
+%\definecolor{cornflowerblue}{rgb}{0.39, 0.58, 0.93}
+\definecolor{frenchblue}{rgb}{0.0, 0.45, 0.73}
+\definecolor{amber}{rgb}{1.0, 0.75, 0.0}
+\definecolor{airforceblue}{rgb}{0.36, 0.54, 0.66}
+%\setbeamercolor*{lower separation line head}{bg=DeepSkyBlue4} 
+
+%\colorlet{structure}{frenchblue}
+%\colorlet{kleur}{amber}
+%%\colorlet{kleur}{structure!30}
+%\colorlet{bandeau}{structure!30}
+%\colorlet{fond}{white}
+%\colorlet{fondalerttitle}{white}
+%\colorlet{fondalert}{structure!60}
+%%\colorlet{fondblocktitle}{structure!60}
+%\colorlet{fondblocktitle}{structure!80}
+%\colorlet{fondblock}{structure!30}
+%\colorlet{lstfond}{structure!30}
+%\colorlet{fondblock}{structure!60}
+%\colorlet{lstfond}{structure!60}
+%%\colorlet{lstfond}{black!15}
+%
+
+%% Vert green 
+%\definecolor{structure}{RGB}{0, 204, 0} 
+
+%% orange 
+%\definecolor{structure}{RGB}{255, 128, 0}
+%\setbeamercolor*{lower separation line head}{bg=structure}
+
+
+% ligne en-tete
+\setbeamercolor*{lower separation line head}{bg=structure}
+% bandeau en-tete
+\setbeamercolor*{palette tertiary}{fg=black,bg=bandeau}
+% bandeau en-tete 2ieme niveau (not used here)
+\setbeamercolor*{palette quaternary}{fg=black,bg=bandeau}
+
+% text
+\setbeamercolor*{normal text}{fg=black,bg=fond}
+\setbeamercolor*{alerted text}{fg=structure} 
+\setbeamercolor*{example text}{fg=black}
+\setbeamercolor*{structure}{fg=structure}
+
+
+\setbeamerfont{block title}{size={}}
+\setbeamercolor*{block title}{bg=fondblocktitle}
+\setbeamercolor*{block body}{bg=fondblock}
+
+%\setbeamercolor*{block title alerted}{bg=structure,fg=black}
+\setbeamercolor*{block title alerted}{bg=fondalerttitle,fg=black}
+\setbeamercolor*{block body alerted}{bg=fondalert,fg=black}
+
+
+
+
+\renewcommand{\(}{\begin{columns}}
+\renewcommand{\)}{\end{columns}}
+\newcommand{\<}[1]{\begin{column}{#1}}
+\renewcommand{\>}{\end{column}}
+
+
+%\beamertemplatetransparentcovereddynamic
+\beamertemplatetransparentcovered
+%\setbeamertemplate{enumerate item}{(\alph{enumi})}
+%\setbeamertemplate{enumerate subitem}{(\roman{enumii})}
+
+\setbeamertemplate{note page}{\insertnote}
+
+\usepackage{etoolbox}
+\setbeamertemplate{itemize items}[circle]
+
+\mode
+<all>
+
+
